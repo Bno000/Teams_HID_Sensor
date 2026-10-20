@@ -1,0 +1,18 @@
+esphome:
+  name: teams-headset-device
+  platform: ESP32
+  board: esp32-s3-devkitc-1
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/Bno000/Teams_HID_Sensor
+
+tinyusb:
+  # Initializes the native USB hardware layer on ESP32-S3
+
+hid_telephony:
+  in_call:
+    name: "Teams In Call Status"
+  mute:
+    name: "Teams Mute Status"
