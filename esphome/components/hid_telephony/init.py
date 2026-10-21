@@ -1,5 +1,5 @@
-import esphome.codegen as cg
 import esphome.config_validation as cv
+import esphome.codegen as cg
 from esphome.components import binary_sensor
 from esphome.const import CONF_ID
 
