@@ -3,14 +3,28 @@ esphome:
   platform: ESP32
   board: esp32-s3-devkitc-1
 
+esp32:
+  framework:
+    type: arduino
+
 external_components:
   - source:
       type: git
       url: https://github.com/Bno000/Teams_HID_Sensor
+    refresh: 0s
 
+# The base TinyUSB stack configuration
 tinyusb:
-  # Initializes the native USB hardware layer on ESP32-S3
+  usb_product_id: 16385
+  usb_vendor_id: 12346
+  usb_lang_id: 1033
+  usb_manufacturer_str: "ESPHome"
+  usb_product_str: "ESPHome"
 
+# REQUIRED: Satisfies ESPHome's requirement that tinyusb must have at least one active USB class component
+usb_cdc_acm:
+
+# Your custom external component handling the HID Telephony descriptors
 hid_telephony:
   in_call:
     name: "Teams In Call Status"
