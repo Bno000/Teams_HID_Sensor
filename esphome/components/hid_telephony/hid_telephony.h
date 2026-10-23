@@ -38,18 +38,22 @@ const uint8_t desc_hid_report[] = {
     0xC0               // END_COLLECTION
 };
 
-// Global instance pointers for the native TinyUSB callbacks to reference
 static binary_sensor::BinarySensor *g_in_call_sensor = nullptr;
 static binary_sensor::BinarySensor *g_mute_sensor = nullptr;
 
-// TinyUSB Callbacks (Called automatically by the native stack)
+// Native TinyUSB HID Callbacks
 extern "C" {
-uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t *buffer, uint16_t reqlen) {
+uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) {
+    return desc_hid_report;
+}
+
+uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, uint8_t report_type, uint8_t *buffer, uint16_t reqlen) {
     return 0;
 }
 
-void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
-    if (report_type == HID_REPORT_TYPE_OUTPUT && bufsize > 0) {
+void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, uint8_t report_type, uint8_t const *buffer, uint16_t bufsize) {
+    // 2 corresponds to HID_REPORT_TYPE_OUTPUT in TinyUSB stack
+    if (report_type == 2 && bufsize > 0) {
         uint8_t led_state = buffer[0];
         bool in_call = (led_state & 0x01) != 0;
         bool muted = (led_state & 0x02) != 0;
